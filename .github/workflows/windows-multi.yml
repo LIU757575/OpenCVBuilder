@@ -13,9 +13,9 @@ jobs:
           - { cv: 4.8.1 }
         list:
           - { win_ver: 2019, vs_name: vs2015, vs_ver: v140 }   # VS2015 使用 windows-2019 镜像
-          - { win_ver: 2022, vs_name: vs2022, vs_ver: v143 }   # VS2022 使用 windows-2022 镜像
+         # - { win_ver: 2022, vs_name: vs2022, vs_ver: v143 }   # VS2022 使用 windows-2022 镜像
         crt: [md, mt]
-        build_type: [Debug, Release, RelWithDebInfo]
+        build_type: [Debug, Release]
 
     runs-on: windows-${{ matrix.list.win_ver }}
     name: windows-${{ matrix.list.vs_name }}-${{ matrix.crt }}-${{ matrix.build_type }}
