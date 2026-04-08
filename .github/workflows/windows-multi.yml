@@ -1,7 +1,8 @@
+
 name: windows-multi
 
 on:
-  workflow_dispatch:      # 仅支持手动触发，不影响原有 tag 触发逻辑
+  workflow_dispatch:      # 仅手动触发
 
 jobs:
   windows-multi:
@@ -11,10 +12,8 @@ jobs:
         ver:
           - { cv: 4.8.1 }
         list:
-          - { win_ver: 2019, vs_name: vs2015, vs_ver: v140 }
-          - { win_ver: 2019, vs_name: vs2017, vs_ver: v141 }
-          - { win_ver: 2019, vs_name: vs2019, vs_ver: v142 }
-          - { win_ver: 2022, vs_name: vs2022, vs_ver: v143 }
+          - { win_ver: 2019, vs_name: vs2015, vs_ver: v140 }   # VS2015 使用 windows-2019 镜像
+          - { win_ver: 2022, vs_name: vs2022, vs_ver: v143 }   # VS2022 使用 windows-2022 镜像
         crt: [md, mt]
         build_type: [Debug, Release, RelWithDebInfo]
 
@@ -25,10 +24,10 @@ jobs:
       PKG_NAME: opencv-${{ matrix.ver.cv }}-windows-${{ matrix.list.vs_name }}-${{ matrix.crt }}-${{ matrix.build_type }}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: checkout opencv
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: opencv/opencv
           path: opencv-${{ matrix.ver.cv }}
@@ -54,10 +53,7 @@ jobs:
           rm windows-x86 -r -fo
 
       - name: upload
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ env.PKG_NAME }}
           path: ${{ env.PKG_NAME }}.7z
-
-  # 注意：新工作流没有 release job，产物只作为 workflow artifact 手动下载
-  # 如需自动发布，可自行添加类似 release job（但会与原有 release 逻辑冲突，建议手动发布）
